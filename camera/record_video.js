@@ -13,7 +13,7 @@ const noti = () => {
     form_data.append("imageFile", fs.createReadStream('video/test_2.h264'));
 
     let headers = Object.assign({
-        'Authorization': 'Bearer ${token}'
+        'Authorization': 'Bearer ${FiBZ0d8Nt7LcaCgt55FBo6EMxwFGnhzvtfY0zKaI5BV}'
     }, form_data.getHeaders());
 
     axios({
