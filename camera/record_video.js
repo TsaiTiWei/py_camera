@@ -31,7 +31,7 @@ const noti = () => {
         form_data.append("imageFile", fs.createReadStream('video/test_2.h264')); // 注意：這是從 H.264 文件中讀取
 
         let headers = Object.assign({
-                'Authorization': 'Bearer ${token}' // 在此填入你的 Line Notify Token
+                'Authorization': `Bearer ${token}` // 在此填入你的 Line Notify Token
         }, form_data.getHeaders());
 
         // 上傳影片到 Line Notify 透過 Line API
