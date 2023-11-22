@@ -8,8 +8,8 @@ let FormData = require("form-data");
 const token = process.env.LINE_TOKEN;
 
 // Start to record a video...
-libcamera.vid({
-        output: 'video/test_2.h264', // 注意：這是將影片保存為 H.264 格式
+libcamera.video({
+        output: 'test_1.h264', // 注意：這是將影片保存為 H.264 格式
         timeout: 5000, // 影片錄製時間（毫秒）
         width: 640,
         height: 480
