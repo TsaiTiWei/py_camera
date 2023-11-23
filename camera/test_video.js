@@ -1,63 +1,55 @@
+require('dotenv').config();
 const { exec } = require('child_process');
-const axios = require('axios');
+const axios = require("axios");
+const fs = require("fs");
 
-const startRecording = () => {
-  const outputFilename = 'output.mp4';
+let FormData = require("form-data");
 
-  // 使用 ffmpeg 录制视频，持续 10 秒
-  const command = `ffmpeg -f v4l2 -i /dev/video0 -t 10 ${outputFilename}`;
+const token = process.env.LINE_TOKEN;
 
-  const child = exec(command, (error, stdout, stderr) => {
+// 使用 child_process 执行 libcamera 命令来录制视频
+exec('libcamera-vid -o test_11.mp4 -t 5000 -w 640 -h 480', (error, stdout, stderr) => {
     if (error) {
-      console.error(`Error: ${error.message}`);
-      return;
+        console.error(`Error: ${error.message}`);
+        return;
     }
     if (stderr) {
-      console.error(`Stderr: ${stderr}`);
-      return;
+        console.error(`Stderr: ${stderr}`);
+        return;
     }
-    console.log(`Video recording complete. Output saved to: ${outputFilename}`);
+    
+    console.log(`stdout: ${stdout}`);
 
-    // 上传视频到 Line Notify
-    uploadToLineNotify(outputFilename);
-  });
+    // 录制完成后进行 Line Notify 提醒
+    noti();
+});
 
-  // 在一定时间后停止录制
-  setTimeout(() => {
-    child.kill('SIGINT');
-  }, 10000);
-};
+const noti = () => {
+    let form_data = new FormData();
+    form_data.append("message", "Here's the video.");
+    form_data.append("videoFile", fs.createReadStream('test_11.mp4'));
 
-const uploadToLineNotify = async (videoPath) => {
-  const lineNotifyToken = 'sm545ZAvFjAbHffJRAfSa8D2iuT8d7DAhjvthB5sEnf'; // 替换为你的 Line Notify Token
-  const apiUrl = 'https://notify-api.line.me/api/notify';
+    let headers = Object.assign({
+        'Authorization': `Bearer ${token}`
+    }, form_data.getHeaders());
 
-  try {
-    // 通过axios上传视频
-    const response = await axios.post(apiUrl, null, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${lineNotifyToken}`
-      },
-      params: {
-        message: 'New video from Raspberry Pi', // 通知的消息
-      },
-      data: {
-        imageFile: {
-          value: require('fs').createReadStream(videoPath),
-          options: {
-            filename: 'output.mp4',
-            contentType: 'video/mp4'
-          }
+    axios({
+        method: 'post',
+        url: "https://notify-api.line.me/api/notify",
+        data: form_data,
+        headers: headers
+    })
+    .then((response) => {
+        console.log("HTTP StateCode:" + response.status);
+        console.log(response.data);
+    })
+    .catch((error) => {
+        console.error("Failed to send a line notification");
+        if (error.response) {
+            console.error("HTTP StatusCode:" + error.response.status);
+            console.error(error.response.data);
+        } else {
+            console.error(error);
         }
-      }
     });
-
-    console.log('Video uploaded to Line Notify successfully');
-  } catch (error) {
-    console.error('Error uploading video to Line Notify:', error.message);
-  }
 };
-
-// 启动视频录制
-startRecording();
