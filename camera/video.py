@@ -18,7 +18,7 @@ os.system(convert_command)
 
 # LINE Notify 設定
 url = "https://notify-api.line.me/api/notify"
-token = "YOUR_LINE_NOTIFY_TOKEN"  # 替換為你的 LINE Notify 權杖
+token = "FiBZ0d8Nt7LcaCgt55FBo6EMxwFGnhzvtfY0zKaI5BV"  # 替換為你的 LINE Notify 權杖
 
 headers = {
     "Authorization": f"Bearer {token}"
