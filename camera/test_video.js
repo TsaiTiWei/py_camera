@@ -8,15 +8,15 @@ let FormData = require("form-data");
 const token = process.env.LINE_TOKEN;
 
 // 使用 child_process 执行 libcamera 命令来录制视频
-exec('libcamera-vid -o Documents/py_camera/camera/test_11.h624 -t 5000 --width 640 --height 480', (error, stdout, stderr) => {
+exec('libcamera-vid -o test_11.h624 -t 5000 --width 640 --height 480', (error, stdout, stderr) => {
     if (error) {
         console.error(`Error: ${error.message}`);
         return;
     }
-    if (stderr) {
-        console.error(`Stderr: ${stderr}`);
-        return;
-    }
+    //if (stderr) {
+    //    console.error(`Stderr: ${stderr}`);
+    //    return;
+    //}
     
     console.log(`stdout: ${stdout}`);
 
