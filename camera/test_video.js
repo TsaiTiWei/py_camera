@@ -18,7 +18,7 @@ const startRecording = () => {
     }
     console.log(`Video recording complete. Output saved to: ${outputFilename}`);
 
-    // 在錄制完成後，上傳至 Line Notify
+    // 上传视频到 Line Notify
     uploadToLineNotify(outputFilename);
   });
 
@@ -28,25 +28,34 @@ const startRecording = () => {
   }, 10000);
 };
 
-const uploadToLineNotify = async (filename) => {
-  const lineNotifyToken = 'sm545ZAvFjAbHffJRAfSa8D2iuT8d7DAhjvthB5sEnf'; // 記得替換成你的 Line Notify token
-  const lineNotifyAPI = 'https://notify-api.line.me/api/notify';
+const uploadToLineNotify = async (videoPath) => {
+  const lineNotifyToken = 'YOUR_LINE_NOTIFY_TOKEN'; // 替换为你的 Line Notify Token
+  const apiUrl = 'https://notify-api.line.me/api/notify';
 
   try {
-    const response = await axios.post(
-      lineNotifyAPI,
-      `message=Video recording complete. Output saved to: ${filename}`,
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Bearer ${lineNotifyToken}`,
-        },
+    // 通过axios上传视频
+    const response = await axios.post(apiUrl, null, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${lineNotifyToken}`
+      },
+      params: {
+        message: 'New video from Raspberry Pi', // 通知的消息
+      },
+      data: {
+        imageFile: {
+          value: require('fs').createReadStream(videoPath),
+          options: {
+            filename: 'output.mp4',
+            contentType: 'video/mp4'
+          }
+        }
       }
-    );
+    });
 
-    console.log('Line Notify response:', response.data);
+    console.log('Video uploaded to Line Notify successfully');
   } catch (error) {
-    console.error('Error sending notification to Line Notify:', error.message);
+    console.error('Error uploading video to Line Notify:', error.message);
   }
 };
 
