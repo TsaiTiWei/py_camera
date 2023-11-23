@@ -29,7 +29,7 @@ const startRecording = () => {
 };
 
 const uploadToLineNotify = async (videoPath) => {
-  const lineNotifyToken = 'YOUR_LINE_NOTIFY_TOKEN'; // 替换为你的 Line Notify Token
+  const lineNotifyToken = 'sm545ZAvFjAbHffJRAfSa8D2iuT8d7DAhjvthB5sEnf'; // 替换为你的 Line Notify Token
   const apiUrl = 'https://notify-api.line.me/api/notify';
 
   try {
