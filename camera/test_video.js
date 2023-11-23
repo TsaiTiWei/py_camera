@@ -8,15 +8,13 @@ let FormData = require("form-data");
 const token = process.env.LINE_TOKEN;
 
 // 使用 child_process 执行 libcamera 命令来录制视频
-exec('libcamera-vid -o test_11.mp4 -t 5000 --width 640 --height 480', (error, stdout, stderr) => {
+exec('libcamera-vid -o test_11.h624 -t 5000 --width 640 --height 480', (error, stdout, stderr) => {
     if (error) {
         console.error(`Error: ${error.message}`);
-        console.log("error1")
         return;
     }
     if (stderr) {
         console.error(`Stderr: ${stderr}`);
-        console.log("error2")
         return;
     }
     
@@ -29,7 +27,7 @@ exec('libcamera-vid -o test_11.mp4 -t 5000 --width 640 --height 480', (error, st
 const noti = () => {
     let form_data = new FormData();
     form_data.append("message", "Here's the video.");
-    form_data.append("imageFile", fs.createReadStream('test_11.mp4'));
+    form_data.append("imageFile", fs.createReadStream('test_11.h624'));
 
     let headers = Object.assign({
         'Authorization': `Bearer ${token}`
