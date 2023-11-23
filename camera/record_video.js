@@ -8,8 +8,8 @@ let FormData = require("form-data");
 const token = process.env.LINE_TOKEN;
 
 // Start to record a video...
-libcamera.vid({
-        output: 'test_11.mp4', // 注意：這是將影片保存為 H.264 格式
+libcamera.still({
+        output: 'test_11.jpg', // 注意：這是將影片保存為 H.264 格式
         timeout: 5000, // 影片錄製時間（毫秒）
         width: 640,
         height: 480
@@ -28,7 +28,7 @@ libcamera.vid({
 const noti = () => {
         let form_data = new FormData();
         form_data.append("message", "Here's the video.");
-        form_data.append("videoFile", fs.createReadStream('test_11.mp4')); // 注意：這是從 H.264 文件中讀取
+        form_data.append("imageFile", fs.createReadStream('test_11.jpg')); // 注意：這是從 H.264 文件中讀取
 
         let headers = Object.assign({
                 'Authorization': `Bearer ${token}` // 在此填入你的 Line Notify Token
